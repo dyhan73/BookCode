@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:ws="http://jax-ws.dev.java.net/spring/core"
+       xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://jax-ws.dev.java.net/spring/core
+        http://jax-ws.dev.java.net/spring/core.xsd
+        http://jax-ws.dev.java.net/spring/servlet
+        http://jax-ws.dev.java.net/spring/servlet.xsd">
+   
+   	
+	 	<wss:binding url="/OrderService">
+	        <wss:service>
+	            <ws:service bean="#orderWS"/>
+	        </wss:service>
+	    </wss:binding>
+	    
+         <bean id="orderWS" class="com.ensoa.orderservice.OrderSerivceEndpoint">
+        	<property name="orderService" ref="orderService"/>
+        </bean>
+        <bean id="orderService" class="com.ensoa.order.service.OrderServiceImpl">
+        	<property name="orderRepository" ref="orderRepository"/>
+        </bean>
+        <bean id="productService" class="com.ensoa.order.service.ProductServiceImpl">
+        	<property name="productRepository" ref="productRepository"/>
+        </bean>
+        <bean id="customerService" class="com.ensoa.order.service.CustomerServiceImpl">
+        	<property name="customerRepositiory" ref="customerRepositiory"/>
+        </bean>
+        <bean id="orderRepository" class="com.ensoa.order.repository.OrderRepositoryImpl">
+        	<property name="productRepository" ref="productRepository"/>
+        </bean>
+        <bean id="productRepository" class="com.ensoa.order.repository.ProductRepositoryImpl" />
+        <bean id="customerRepositiory" class="com.ensoa.order.repository.CustomerRepositoryImpl" />
+
+
+	
+</beans>

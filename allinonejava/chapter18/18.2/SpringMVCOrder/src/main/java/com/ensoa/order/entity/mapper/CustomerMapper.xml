@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.ensoa.order.entity.mapper.CustomerMapper">
+    	<resultMap id="CustomerResult" type="CustomerEntity" >
+           	<id property="id" column="customer_id"/>
+           	<result property="name" column="name"/>
+            <result property="address" column="address"/>
+			<result property="email" column="email"/>
+   		</resultMap>
+        <select id="findAll" resultMap="CustomerResult">
+         	SELECT * FROM CUSTOMER ORDER BY CUSTOMER_ID
+		</select>
+		
+       	<select id="findById" parameterType="long" resultMap="CustomerResult">
+         	SELECT * FROM CUSTOMER WHERE CUSTOMER_ID=#{custId}
+       	</select>
+       	
+       	<select id="findByName" parameterType="String" resultMap="CustomerResult">
+         	SELECT * FROM CUSTOMER WHERE NAME=#{name}
+       	</select>
+       	
+       	<!-- for MySQL -->
+       	<insert id="insert" parameterType="CustomerEntity" useGeneratedKeys="true" keyProperty="custId">
+       		INSERT INTO CUSTOMER(NAME, ADDRESS, EMAIL) VALUES (#{name}, #{address}, #{email})
+       	</insert>
+       	
+		<!--  for Oracle #1
+       	<insert id="insert" parameterType="CustomerEntity">
+        	<selectKey keyProperty="custId" resultType="int" order="BEFORE">
+        		SELECT ROOT.CUSTOMER_SEQ.NEXTVAL FROM DUAL
+         	</selectKey>
+       		INSERT INTO CUSTOMER(CUSTOMER_ID, NAME, ADDRESS, EMAIL) VALUES (#{custId}, #{name}, #{address}, #{email})
+   		</insert>
+        -->
+		<!--  for Oracle #2
+       	<insert id="insert" parameterType="CustomerEntity">
+       		INSERT INTO CUSTOMER(NAME, ADDRESS, EMAIL) VALUES (#{name}, #{address}, #{email})
+        	<selectKey keyProperty="custId" resultType="int" order="AFTER">
+        		SELECT ROOT.CUSTOMER_SEQ.CURRVAL FROM DUAL
+         	</selectKey>
+   		</insert>
+         -->
+        <select id="find" parameterType="com.ensoa.order.domain.CustomerSearch" resultMap="CustomerResult">
+         	 	SELECT * FROM CUSTOMER 
+         	 	<where>
+         	 		<if test="name != null">
+	         	 		NAME LIKE #{name}
+	         	 	</if>
+	         	 	<if test="address != null">
+	         	 		AND ADDRESS LIKE #{address}
+	         	 	</if>
+	         	 	<if test="email != null">
+	         	 		AND EMAIL LIKE #{email}
+	         	 	</if>
+         	 	</where>
+         </select>
+	
+		<update id="update" parameterType="CustomerEntity">
+  				UPDATE CUSTOMER 
+  				<set>
+  					<if test="name != null">NAME = #{name}, </if>
+  					<if test="address != null">ADDRESS = #{address}, </if>
+  					<if test="email != null">EMAIL = #{email} </if>
+  				</set>
+  				WHERE CUSTOMER_ID = #{id}
+  		</update>
+       	
+       	<delete id="delete" parameterType="long">
+       			DELETE FROM CUSTOMER WHERE CUSTOMER_ID = #{id}
+       	</delete>
+    
+    	<select id="findBySp" parameterType="string" resultMap="CustomerResult" 
+    				  statementType="CALLABLE">
+    			{ CALL GET_CUSTOMERS(#{name, mode=IN, jdbcType=VARCHAR}) }
+    	</select>   
+	</mapper>

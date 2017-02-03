@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="CE-3.5.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd">
+    <spring:beans>
+        <spring:bean id="customerService" name="customerService"  class="com.ensoa.order.service.CustomerServiceImpl">
+            <spring:property name="repository" ref="customerRepository"/>
+        </spring:bean>
+        <spring:bean id="customerRestService" name="customerRestService" class="com.ensoa.order.muleservice.CustomerRestService">
+        	<spring:property name="service" ref="customerService"/>
+        </spring:bean>
+        <spring:bean id="customerRepository" name="customerRepository" class="com.ensoa.order.repository.CustomerRepositoryImpl"/>
+    </spring:beans>
+    <jms:activemq-connector name="Active_MQ" specification="1.1" brokerURL="tcp://localhost:61616" validateConnections="true" doc:name="Active MQ"/>
+    <data-mapper:config name="Pojo_To_Pojo"  transformationGraphPath="pojo_to_pojo.grf" doc:name="Pojo_To_Pojo"/>
+    <flow name="muleorderserviceFlow1" doc:name="muleorderserviceFlow1">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" doc:name="HTTP"/>
+       <jersey:resources doc:name="REST" >
+            <component>
+                <spring-object bean="customerRestService" />
+            </component>
+        </jersey:resources>
+        <choice doc:name="Choice">
+            <when expression="#[message.inboundProperties.'http.method' == 'POST']">
+                <custom-transformer class="com.ensoa.order.muleservice.JerseyResponseTransformer" doc:name="Java"/>
+                <data-mapper:transform config-ref="Pojo_To_Pojo" doc:name="Pojo To Pojo"/>
+                <jms:outbound-endpoint doc:name="JMS" connector-ref="Active_MQ" queue="customer.queue"/>
+            </when>
+            <otherwise>
+                <echo-component doc:name="Echo"/>
+            </otherwise>
+        </choice>
+    </flow>
+</mule>

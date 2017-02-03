@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="orderService"
+	     class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean"> 
+		<property name="serviceInterface" 
+			    value="com.ensoa.orderservice.OrderSerivceEndpoint"/>
+		<property name="wsdlDocumentUrl" 
+			    value="http://localhost:8080/orderservice/OrderService?WSDL"/>
+		<property name="namespaceUri" value="http://orderservice.ensoa.com/"/> 
+		<property name="serviceName" value="OrderService"/> 
+		<property name="portName" value="OrderSerivceEndpointPort"/>
+	</bean>
+</beans>

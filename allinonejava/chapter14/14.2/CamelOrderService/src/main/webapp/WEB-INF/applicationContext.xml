@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:cxf="http://camel.apache.org/schema/cxf"
+	xsi:schemaLocation="http://cxf.apache.org/transports/camel http://cxf.apache.org/transports/camel.xsd
+		http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf-2.14.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+  
+ 	<bean id="customerService" class="com.ensoa.order.service.CustomerServiceImpl">
+    	<property name="repository" ref="customerRepository"/>
+    </bean>
+    <bean id="customerRepository" class="com.ensoa.order.repository.CustomerRepositoryImpl"/>	
+	<bean id="customerRestService" class="com.ensoa.order.camelservice.CustomerRestService"/>	
+	<bean id="customerRestRoute" class="com.ensoa.order.camelservice.CustomerRestRoute" />
+	
+	<import resource="classpath:META-INF/cxf/cxf.xml" />		
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />		
+
+	<cxf:rsServer id="rsServer" address="http://localhost:8081/OrderService">
+		<cxf:serviceBeans>
+			<ref bean="customerRestService"/>
+		</cxf:serviceBeans>
+		<cxf:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+		</cxf:providers>
+	</cxf:rsServer>
+	<!-- 
+	<bean id="jms" class="org.apache.activemq.camel.component.ActiveMQComponent">
+    	<property name="brokerURL" value="tcp://localhost:61616"/>
+  	</bean>
+  	 -->
+ 	<bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+    	<property name="connectionFactory">
+      		<bean class="org.apache.activemq.ActiveMQConnectionFactory">
+        		<property name="brokerURL" value="tcp://localhost:61616" />
+      		</bean>
+    	</property>
+  	</bean>  	
+
+	<camelContext xmlns="http://camel.apache.org/schema/spring">
+	<!-- 
+	    <route>
+	        <from uri="cxfrs:bean:rsServer?bindingStyle=SimpleConsumer"/>
+	        <choice>
+	            <when>
+	                <simple>${header.operationName} == 'saveCustomer'</simple>
+	                <setExchangePattern pattern="InOnly"/>
+	                <to uri="jms:queue:customer.queue"/>
+	            </when>
+	            <otherwise>
+	                <to uri="bean:customerService?method=getCustomers"/>
+	            </otherwise>
+	        </choice>
+	        <log message="CUSTOMER :  ${body}"/>
+	    </route>
+	    <route>
+	    	<from uri="jms:queue:customer.queue"/>
+	        <to uri="bean:customerService?method=saveCustomer"/>
+	        <log message="CUSTOMER :  ${body}"/>
+	    </route>
+  	 -->
+    <!-- --> 
+      <routeBuilder ref="customerRestRoute"/>
+	 <!-- -->
+	</camelContext>
+</beans>

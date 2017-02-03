@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><Graph __version="3.5.0" author="bsjun" created="Mon Sep 22 16:26:33 KST 2014" description="Pojo To Pojo" guiVersion="3.4.4.P" id="1411455170237" licenseCode="Unlicensed" licenseType="Unknown" modified="Mon Sep 22 16:26:33 KST 2014" modifiedBy="bsjun" name="Pojo_To_Pojo" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/object" _dataStructure="OBJECT" _id="__id" _type="Output" id="0001794c-72ab-4ff7-9fac-799005e0a3b2">
+<Record fieldDelimiter="," name="Customer" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/object/address" containerType="SINGLE" label="address" name="address" type="string"/>
+<Field __index="1" __sourcePath="{}/object/email" containerType="SINGLE" label="email" name="email" type="string"/>
+<Field __index="2" __sourcePath="{}/object/id" containerType="SINGLE" label="id" name="id" type="long"/>
+<Field __index="3" __sourcePath="{}/object/name" containerType="SINGLE" label="name" name="name" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/object" _dataStructure="OBJECT" _id="__id" _type="Input" id="a0e4a5ee-ae17-486f-b148-31c8f98b7431">
+<Record fieldDelimiter="," name="RestCustomer" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/object/basicAddress" containerType="SINGLE" label="basicAddress" name="basicAddress" type="string"/>
+<Field __index="1" __sourcePath="{}/object/detailAddress" containerType="SINGLE" label="detailAddress" name="detailAddress" type="string"/>
+<Field __index="2" __sourcePath="{}/object/email" containerType="SINGLE" label="email" name="email" type="string"/>
+<Field __index="3" __sourcePath="{}/object/id" containerType="SINGLE" label="id" name="id" type="long"/>
+<Field __index="4" __sourcePath="{}/object/name" containerType="SINGLE" label="name" name="name" type="string"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node enabled="enabled" fileURL="dict:inputPayload" guiName="Pojo READER" guiX="20" guiY="20" id="BEAN_READER0" type="BEAN_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context outPort="0" sequenceField="__id" xpath=".">
+  <Mapping cloverField="basicAddress" trim="true" xpath="basicAddress"/>
+  <Mapping cloverField="detailAddress" trim="true" xpath="detailAddress"/>
+  <Mapping cloverField="email" trim="true" xpath="email"/>
+  <Mapping cloverField="id" trim="true" xpath="id"/>
+  <Mapping cloverField="name" trim="true" xpath="name"/>
+</Context>
+]]></attr>
+<attr name="_data_format"><![CDATA[JAVA]]></attr>
+<attr name="schema"><![CDATA[<?xml version="1.0" encoding="UTF-8"?><schema-object>
+  <typed-object-ref type-ref="com.ensoa.order.muleservice.RestCustomer"/>
+  <typed-object type="com.ensoa.order.muleservice.RestCustomer">
+    <typed-object-ref name="basicAddress" type-ref="java.lang.String"/>
+    <typed-object-ref name="detailAddress" type-ref="java.lang.String"/>
+    <typed-object-ref name="email" type-ref="java.lang.String"/>
+    <typed-object-ref name="id" type-ref="long"/>
+    <typed-object-ref name="name" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="java.lang.String"/>
+  <typed-object type="long"/>
+</schema-object>
+]]></attr>
+</Node>
+<Node cacheInMemory="true" enabled="enabled" fileURL="dict:outputPayload" guiName="Pojo WRITER" guiX="900" guiY="20" id="BEAN_WRITER0" type="BEAN_WRITER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<object xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" clover:inPort="0">
+  <address>$0.address</address>
+  <email>$0.email</email>
+  <id>$0.id</id>
+  <name>$0.name</name>
+</object>]]></attr>
+<attr name="_data_format"><![CDATA[JAVA]]></attr>
+<attr name="schema"><![CDATA[<?xml version="1.0" encoding="UTF-8"?><schema-object>
+  <typed-object-ref type-ref="com.ensoa.order.domain.Customer"/>
+  <typed-object type="com.ensoa.order.domain.Customer">
+    <typed-object-ref name="address" type-ref="java.lang.String"/>
+    <typed-object-ref name="email" type-ref="java.lang.String"/>
+    <typed-object-ref name="id" type-ref="long"/>
+    <typed-object-ref name="name" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="java.lang.String"/>
+  <typed-object type="long"/>
+</schema-object>
+]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; 'object'" guiX="460" guiY="20" id="FOREACH_OBJECT_OBJECT" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+//END -> DO NOT REMOVE
+output.email = input.email;
+output.id = input.id;
+output.name = input.name;
+output.address = input.basicAddress + ", " + input.detailAddress;]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="BEAN_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="a0e4a5ee-ae17-486f-b148-31c8f98b7431" outPort="Port 0 (out)" toNode="FOREACH_OBJECT_OBJECT:0"/>
+<Edge debugMode="true" fromNode="FOREACH_OBJECT_OBJECT:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="0001794c-72ab-4ff7-9fac-799005e0a3b2" outPort="Port 0 (out)" toNode="BEAN_WRITER0:0"/>
+</Phase>
+</Graph>

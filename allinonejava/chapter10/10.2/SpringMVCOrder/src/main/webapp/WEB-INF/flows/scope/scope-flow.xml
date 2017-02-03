@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	
+	<view-state id="startView">
+		<on-render>
+			<set name="requestScope.requestscope_start_username" value="'전병선'"/>
+		</on-render>
+		<transition on="toSecond" to="secondView">
+		   <set name="flowScope.flowscope_username"
+                value="requestParameters.userName"/>
+            <set name="flashScope.flashscope_username"
+                value="requestParameters.userName"/>
+            <set name="requestScope.requestscope_start_username"
+                value="requestParameters.userName"/>
+            <set name="viewScope.viewscope_start_username"
+                value="requestParameters.userName"/>
+            <set name="conversationScope.conversationcope_username"
+                value="requestParameters.userName"/>
+		</transition>
+	</view-state>
+	
+	<view-state id="secondView" >
+		<on-entry>
+            <set name="viewScope.viewscope_second_username"
+                value="requestParameters.userName"/>
+            <set name="flashScope.flashscope_onentry_username"
+                value="requestParameters.userName"/>
+            <set name="viewScope.eventname" value="currentEvent.id" />
+            <set name="viewScope.url" value="flowExecutionUrl" />
+            <set name="viewScope.requestcontext" value="flowRequestContext.inViewState()" />
+			<evaluate expression="messageContext.hasErrorMessages()"
+                result="viewScope.haserrormsg"/>
+            <!-- Accessing the Spring Web Flow flow execution context. -->
+            <evaluate expression="flowExecutionContext.hasStarted()"
+                result="viewScope.flowstarted"/>
+            <evaluate expression="flowExecutionContext.isActive()"
+                result="viewScope.flowisactive"/>
+            <evaluate expression="flowExecutionContext.hasEnded()"
+                result="viewScope.flowended"/>
+            <!-- Accessing the Spring Web Flow external context. -->
+            <evaluate expression="externalContext.getContextPath()"
+                result="viewScope.contextpath"/>
+            <evaluate expression="externalContext.isAjaxRequest()"
+                result="viewScope.ajaxrequest"/>
+            <evaluate expression="externalContext.isResponseAllowed()"
+            	result="viewScope.responseallowed"/>
+            <evaluate expression="externalContext.isResponseComplete()"
+                result="viewScope.responsecomplete"/>
+            <evaluate expression="externalContext.locale"
+                result="viewScope.currentlocale"/>
+		</on-entry>
+  		<on-render>
+			<set name="requestScope.requestscope_second_username"
+			    value="flowScope.flowscope_username"/>
+		</on-render>           
+	</view-state>
+
+</flow>

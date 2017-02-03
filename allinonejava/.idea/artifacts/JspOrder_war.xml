@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="JspOrder:war">
+    <output-path>$PROJECT_DIR$/chapter05/5.5/JspOrder/target</output-path>
+    <root id="archive" name="JspOrder.war">
+      <element id="artifact" artifact-name="JspOrder:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+    <classPathEntry location="mysql-connector-java-5.1.33.jar" />
+	<context id="context1">
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+		connectionURL=
+		"jdbc:mysql://localhost:3306/order_system?autoReconnect=true" 
+		userId="root" password="1234" />
+		<javaModelGenerator targetPackage="com.ensoa.order.entity.mapper.model"
+		targetProject="SpringMVCOrder" />
+		<sqlMapGenerator targetPackage="com.ensoa.order.entity.mapper.sqlmap"
+		targetProject="SpringMVCOrder" />
+		<javaClientGenerator targetPackage="com.ensoa.order.entity.mapper.client"
+		targetProject="SpringMVCOrder" type="MIXEDMAPPER" />
+		<table schema="order_system" tableName="customer" />
+		<table schema="order_system" tableName="product" />
+		<table schema="order_system" tableName="orders" />
+		<table schema="order_system" tableName="order_item" />
+	</context>
+</generatorConfiguration>

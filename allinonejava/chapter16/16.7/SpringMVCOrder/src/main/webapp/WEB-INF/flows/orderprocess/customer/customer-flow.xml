@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<var name="customer" class="com.ensoa.order.model.CustomerModel" />
+	
+	<view-state id="welcome">
+		<transition on="nameEntered" to = "checkBlackList"/>
+	</view-state>
+	
+	<!-- 
+	<decision-state id="checkBlackList">
+		<if test="orderFlowAction.checkBlackList(requestParameters.name)"
+			  then="rejectRegistration"
+			  else="getCustomer"/>
+	</decision-state>
+ 	-->
+ 	<action-state id="checkBlackList">
+ 		<evaluate expression="orderFlowAction.checkBlackList(requestParameters.name)"/>
+ 		<transition on="yes" to="rejectRegistration"/>
+ 		<transition on="no" to="getCustomer"/>
+ 	</action-state>
+ 	
+ 	
+	<view-state id="rejectRegistration" model="customer" >
+		<binder>
+			<binding property="name"/>
+		</binder>
+		<on-entry>
+			<set name="customer.name" value="requestParameters.name" />
+		</on-entry>
+	</view-state>
+	
+	<action-state id="getCustomer">
+		<evaluate result="customer" expression="orderFlowAction.getCustomer(requestParameters.name)" />
+		<transition to="registerCustomer" on-exception="com.ensoa.order.flow.CustomerNotFoundException" />
+		<transition on="success" to="customerReady" />
+	</action-state>
+
+	<view-state id="registerCustomer"  model="customer" >
+		<on-entry>
+			<set name="customer.name" value="requestParameters.name" />
+		</on-entry>
+		<transition on="save" to="saveCustomer" validate="true"/>
+	</view-state>
+
+	<action-state id="saveCustomer">
+		<evaluate expression="orderFlowAction.addCustomer(customer)" />
+		<transition on="success" to="customerReady" />
+		<transition on="failure" to="getCustomer" />
+	</action-state>
+	
+
+	<end-state id="cancel" />
+	
+	<end-state id="customerReady">
+		<output name="customer" />
+	</end-state>
+
+	<global-transitions>
+		<transition on="cancel" to="cancel" />
+	</global-transitions>
+
+</flow>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="ProductEntity" type="com.ensoa.order.entity.ProductEntity"/>
+		<typeAlias alias="OrderItemEntity" type="com.ensoa.order.entity.OrderItemEntity"/>
+		<typeAlias alias="OrderEntity" type="com.ensoa.order.entity.OrderEntity"/>
+		<typeAlias alias="CustomerEntity" type="com.ensoa.order.entity.CustomerEntity"/>
+	</typeAliases>
+	<mappers>
+		<mapper resource="com/ensoa/order/entity/mapper/ProductMapper.xml"/> 
+		<mapper resource="com/ensoa/order/entity/mapper/OrderItemMapper.xml"/> 
+		<mapper resource="com/ensoa/order/entity/mapper/OrderMapper.xml"/> 
+		<mapper resource="com/ensoa/order/entity/mapper/CustomerMapper.xml"/> 
+	</mappers>
+</configuration>

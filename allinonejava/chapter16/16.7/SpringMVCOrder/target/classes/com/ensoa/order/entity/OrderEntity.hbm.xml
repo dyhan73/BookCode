@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.ensoa.order.entity">
+    <class name="OrderEntity" table="ORDERS">
+        <id name="id">
+            <column name="ORDER_ID" />
+            <generator class="native" />
+        </id>
+        <property name="orderDate" type="java.util.Date">
+            <column name="ORDER_DATE" />
+        </property>
+		<many-to-one name="customer" unique="true" class="CustomerEntity" 
+			cascade="save-update, delete" fetch="join">
+			<column name="CUSTOMER_ID"/>
+		</many-to-one>
+        <set name="items" table="ORDER_ITEM" cascade="save-update, delete" >
+            <key>
+                <column name="ORDER_ID" />
+            </key>
+            <one-to-many class="OrderItemEntity" />
+        </set>
+    </class>
+</hibernate-mapping>

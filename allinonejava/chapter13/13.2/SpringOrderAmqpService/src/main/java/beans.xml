@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.3.xsd">
+
+	<context:component-scan base-package="com.ensoa" />
+	<!-- 		
+	<bean id="connectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+	    <constructor-arg value="localhost"/>
+	     <property name="username" value="guest"/>
+    	<property name="password" value="guest"/>
+	</bean>
+
+	<rabbit:admin connection-factory="connectionFactory"/>
+	 -->
+
+	<bean id="orderListener" class="com.ensoa.orderamqp.OrderListener" />
+
+	<rabbit:connection-factory id="connectionFactory" username="guest" password="guest" host="localhost"/>
+
+	<rabbit:queue id="customer.queue"/>
+	<rabbit:queue id="order.queue" />
+
+	<!-- 
+	<rabbit:fanout-exchange name="customer">
+		<rabbit:bindings>
+			<rabbit:binding queue="customer.queue"/>
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>
+
+	 <rabbit:direct-exchange name="customer">
+	 	<rabbit:bindings>
+	 		<rabbit:binding queue="customer.queue" key="save"/>
+	 	</rabbit:bindings>
+	 </rabbit:direct-exchange>
+	<rabbit:fanout-exchange name="order">
+		<rabbit:bindings>
+			<rabbit:binding queue="order.queue"/>
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>		 
+	 -->
+	 <rabbit:topic-exchange name="customer">
+	 	<rabbit:bindings>
+	 		<rabbit:binding queue="customer.queue" pattern="#.customer.*"/>
+	 	</rabbit:bindings>
+	 </rabbit:topic-exchange>	 
+	<rabbit:fanout-exchange name="order">
+		<rabbit:bindings>
+			<rabbit:binding queue="order.queue"/>
+		</rabbit:bindings>
+	</rabbit:fanout-exchange>	
+	 <rabbit:listener-container connection-factory="connectionFactory">
+			<rabbit:listener queues="customer.queue" ref="orderListener" method="receiveCustomerMessage"/>
+			<rabbit:listener queues="order.queue" ref="orderListener" method="receiveOrderMessage"/>
+	</rabbit:listener-container>
+	
+</beans>

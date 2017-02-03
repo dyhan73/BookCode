@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<var name="order" class="com.ensoa.order.model.OrderModel" />
+	
+	<subflow-state id="identityCustomer"  subflow="orderprocess/customer">
+	<!-- 
+		<output name="customer" value="order.customer" />
+		 -->
+		 <output name="customer"/>
+		<transition on="customerReady" to="buildOrder" >
+			<set name="order.customer" value="customer"/>
+		</transition>
+	</subflow-state>
+	
+	<subflow-state id="buildOrder" subflow="orderprocess/order" >
+ 		<input name="order" value="order" /> 
+		<transition on="orderCreated" to="purchaseOrder" />
+	</subflow-state>
+
+	<action-state id="purchaseOrder">
+		<evaluate expression="orderFlowAction.purchaseOrder(order)" />
+		<transition to="orderCompleted" />
+	</action-state>
+
+	<view-state id="orderCompleted">
+		<transition on="theEnd" to="theEnd" ></transition>
+	</view-state>
+	
+	<end-state id="theEnd" view="/WEB-INF/views/home.jsp"/>
+	
+	<global-transitions>
+		<transition on="cancel" to="identityCustomer" />
+	</global-transitions>
+</flow>

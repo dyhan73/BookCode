@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-http="http://www.springframework.org/schema/integration/http"
+	xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-4.0.xsd
+		http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-4.0.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+	
+	<context:component-scan base-package="com.ensoa.orderintegration" />
+	<context:component-scan base-package="com.ensoa.order.service" />	
+	<context:component-scan base-package="com.ensoa.order.repository" />	
+	<int:annotation-config/>
+	<bean class="org.springframework.integration.http.inbound.IntegrationRequestMappingHandlerMapping"/>
+	<bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+		<property name="targetConnectionFactory">
+			<bean class="org.apache.activemq.ActiveMQConnectionFactory">
+        		<property name="brokerURL" value="tcp://localhost:61616" />
+			</bean>
+		</property>	
+	</bean>
+	<bean id="customerQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="customer.queue"/>
+	</bean>	
+	<int:channel id="customerRestRequest" />
+	<int:channel id="customerRestReply" />
+	<int:channel id="customerRestGetRequest" />
+	<int:channel id="customerRestPostRequest" />
+	<int:channel id="customerRestJms" />
+	<int:channel id="customerJmsInput" />
+				
+	<int-http:inbound-gateway id="customerRestGateway"
+		supported-methods="GET, POST"
+		request-channel="customerRestRequest"
+		reply-channel="customerRestReply"
+		path="/customers"/>
+	<int:router input-channel="customerRestRequest" 
+		expression="headers.http_requestMethod">
+	    <int:mapping value="GET" channel="customerRestGetRequest"/>
+	    <int:mapping value="POST" channel="customerRestPostRequest"/>
+	</int:router>
+	<int:service-activator id="customerServiceActivator"
+		input-channel="customerRestGetRequest"
+		output-channel="customerRestReply"
+		ref="customerService"
+		method="getCustomers"
+		requires-reply="true"/>
+	<int:json-to-object-transformer
+		input-channel="customerRestPostRequest" 
+		output-channel="customerRestJms" 
+		type="com.ensoa.order.domain.Customer" />
+	<int-jms:outbound-channel-adapter id="jmsCusotmerQueue" 
+		channel="customerRestJms" 
+		destination="customerQueue"/>		
+		
+	<int-jms:message-driven-channel-adapter id="jmsCustomerIn"
+			destination="customerQueue"
+			channel="customerJmsInput" />
+	<int:service-activator id="customerSaveActivator"
+			input-channel="customerJmsInput"
+			ref="customerService"
+			method="saveCustomer"
+			requires-reply="false"/>
+														
+
+</beans>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.ensoa.order.entity">
+    <class name="OrderItemEntity" table="ORDER_ITEM">
+        <id name="id">
+            <column name="ORDER_ITEM_ID" />
+            <generator class="native" />
+        </id>
+        <property name="amount" >
+            <column name="AMOUNT" />
+        </property>
+		<many-to-one name="product" unique="true" class="ProductEntity">
+			<column name="PRODUCT_ID"/>
+		</many-to-one>
+		<!-- 
+		<property name="orderId"  insert="false" update="false">
+        	<column name="ORDER_ID"/>
+        </property>
+         -->
+    </class>
+</hibernate-mapping>

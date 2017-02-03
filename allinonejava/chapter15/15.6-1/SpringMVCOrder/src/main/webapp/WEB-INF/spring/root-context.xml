@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<context:component-scan base-package="com.ensoa.order.service" />	
+	<context:component-scan base-package="com.ensoa.order.repository" />	
+	<context:component-scan base-package="com.ensoa.order.aspect" />	
+	<context:component-scan base-package="com.ensoa.order.root" />	
+	<aop:aspectj-autoproxy/>	
+	
+	<!-- 
+	<bean id="messageSource"  class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="cacheSeconds" value="-1"/>
+		<property name="defaultEncoding" value="UTF-8"/>
+		<property name="basenames">
+			<list>
+			<value>/WEB-INF/i18n/message</value>
+			<value>/WEB-INF/i18n/common</value>
+			<value>/WEB-INF/i18n/validation</value>				
+			</list>
+		</property>
+	</bean>
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"> 
+		<property name="validationMessageSource" ref="messageSource" />	
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"  value="classpath:environment.properties" />
+		<property fileEncoding="UTF-8" />
+	</bean>
+
+	<context:property-placeholder file-encoding="UTF-8" location="classpath:environment.properties" />
+	<bean id="dataSource"
+	    class="org.apache.commons.dbcp.BasicDataSource">
+	    <property name="driverClassName" value="${dataSource.driverClassName}"/>
+		<property name="url"  value="${dataSource.url}" />
+		<property name="username" value="${dataSource.username}" />
+		<property name="password" value="${dataSource.password}" />
+	</bean>
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+		
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<bean id="dataSource"
+  		class="org.apache.commons.dbcp.BasicDataSource">
+    	<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+   		<property name="url" value="jdbc:mysql://localhost:3306/order_system" />
+    	<property name="username" value="root" />
+    	<property name="password" value="1234" />
+	</bean>	
+	<bean id="dataSource"
+  		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    	<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+   		<property name="url" value="jdbc:mysql://localhost:3306/order_system" />
+    	<property name="username" value="root" />
+    	<property name="password" value="1234" />
+	</bean>
+	
+	<jee:jndi-lookup jndi-name="/jdbc/order_system" id="dataSource"/>
+	
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="transactionTemplate" 
+		class="org.springframework.transaction.support.TransactionTemplate" >
+		<property name="transactionManager" ref="txManager" />
+	</bean>
+	 -->
+	
+</beans>

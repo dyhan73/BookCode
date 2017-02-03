@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+		targetNamespace="http://service.order.ensoa.com/schema" 
+		xmlns:tns="http://service.order.ensoa.com/schema"
+		elementFormDefault="qualified">
+         <element name="getOrderRequest" type="tns:getOrderRequest"/>
+         <element name="getOrderResponse" type="tns:getOrderResponse"/>
+         <element name="getOrdersRequest" type="tns:getOrdersRequest"/>
+         <element name="getOrdersResponse" type="tns:getOrdersResponse"/>
+         <element name="purchaseOrderRequest" type="tns:purchaseOrderRequest"/>
+         <element name="purchaseOrderResponse" type="tns:purchaseOrderResponse"/>
+          <complexType name="getOrderRequest">
+            <sequence>
+               <element name="id" type="long"/>
+            </sequence>
+         </complexType>
+         <complexType name="getOrderResponse">
+            <sequence>
+               <element minOccurs="0" name="return" type="tns:order"/>
+            </sequence>
+         </complexType>
+         <complexType name="getOrdersRequest">
+            <sequence>
+               <element minOccurs="0" name="customer" type="tns:customer"/>
+            </sequence>
+         </complexType>
+         <complexType name="getOrdersResponse">
+            <sequence>
+               <element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:order"/>
+            </sequence>
+         </complexType>       
+       <complexType name="purchaseOrderRequest">
+            <sequence>
+               <element minOccurs="0" name="order" type="tns:order"/>
+            </sequence>
+         </complexType>
+         <complexType name="purchaseOrderResponse">
+            <sequence/>
+         </complexType>
+         <complexType name="order">
+            <sequence>
+               <element name="id" type="long"/>
+               <element maxOccurs="unbounded" minOccurs="0" name="items" nillable="true" type="tns:orderItem"/>
+               <element minOccurs="0" name="orderDate" type="dateTime"/>
+            </sequence>
+         </complexType>
+         <complexType name="orderItem">
+            <sequence>
+               <element name="amount" type="int"/>
+               <element name="id" type="long"/>
+               <element minOccurs="0" name="product" type="tns:product"/>
+            </sequence>
+         </complexType>
+         <complexType name="product">
+            <sequence>
+               <element minOccurs="0" name="description" type="string"/>
+               <element name="id" type="long"/>
+               <element minOccurs="0" name="name" type="string"/>
+               <element name="price" type="int"/>
+            </sequence>
+         </complexType>
+         <complexType name="customer">
+            <sequence>
+               <element minOccurs="0" name="address" type="string"/>
+               <element minOccurs="0" name="email" type="string"/>
+               <element name="id" type="long"/>
+               <element minOccurs="0" name="name" type="string"/>
+            </sequence>
+         </complexType>
+</schema>

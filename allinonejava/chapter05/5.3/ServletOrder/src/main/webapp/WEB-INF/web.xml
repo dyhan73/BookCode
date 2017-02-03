@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+				 xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+				 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+				 		http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+				  id="WebApp_ID" version="3.1">
+  <display-name>ServletOrder</display-name>
+  <filter>
+  	<filter-name>characterEncodingFilter</filter-name>
+  	<filter-class>com.ensoa.order.filter.CharacterEncodingFilter</filter-class>
+  	<init-param>
+  		<param-name>encoding</param-name>
+  		<param-value>UTF-8</param-value>
+  	</init-param>
+  </filter>
+  <filter-mapping>
+  	<filter-name>characterEncodingFilter</filter-name>
+  	<url-pattern>/*</url-pattern>
+  </filter-mapping>
+ 
+  <filter>
+  	<filter-name>loggingFilter</filter-name>
+  	<filter-class>com.ensoa.order.filter.LoggingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>loggingFilter</filter-name>
+  	<servlet-name>customerServlet</servlet-name>
+  	<dispatcher>REQUEST</dispatcher>
+  </filter-mapping>  
+  
+  <listener>
+  	<listener-class>com.ensoa.order.listener.OrderListener</listener-class>
+  </listener>
+  
+  <servlet>
+    <servlet-name>customerServlet</servlet-name>
+    <servlet-class>com.ensoa.order.servlet.CustomerServlet</servlet-class>
+	<init-param>
+		<param-name>driverClassName</param-name>
+		<param-value>com.mysql.jdbc.Driver</param-value>
+	</init-param>
+	<init-param>
+		<param-name>url</param-name>
+		<param-value>jdbc:mysql://localhost:3306/order_system</param-value>
+	</init-param>
+	<init-param>
+		<param-name>username</param-name>
+		<param-value>root</param-value>
+	</init-param>
+	<init-param>
+		<param-name>password</param-name>
+		<param-value>1234</param-value>
+	</init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>customerServlet</servlet-name>
+    <url-pattern>/customer</url-pattern>
+  </servlet-mapping>
+</web-app>

@@ -1,0 +1,137 @@
+<wsdl:definitions name="OrderService" targetNamespace="http://orderservice.ensoa.com/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://orderservice.ensoa.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <wsdl:types>
+      <xs:schema elementFormDefault="unqualified" targetNamespace="http://orderservice.ensoa.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+         <xs:element name="getOrder" type="tns:getOrder"/>
+         <xs:element name="getOrderResponse" type="tns:getOrderResponse"/>
+         <xs:element name="getOrders" type="tns:getOrders"/>
+         <xs:element name="getOrdersResponse" type="tns:getOrdersResponse"/>
+         <xs:element name="purchaseOrder" type="tns:purchaseOrder"/>
+         <xs:element name="purchaseOrderResponse" type="tns:purchaseOrderResponse"/>
+         <xs:complexType name="purchaseOrder">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="arg0" type="tns:order"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="order">
+            <xs:sequence>
+               <xs:element name="id" type="xs:long"/>
+               <xs:element maxOccurs="unbounded" minOccurs="0" name="items" nillable="true" type="tns:orderItem"/>
+               <xs:element minOccurs="0" name="orderDate" type="xs:dateTime"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="orderItem">
+            <xs:sequence>
+               <xs:element name="amount" type="xs:int"/>
+               <xs:element name="id" type="xs:long"/>
+               <xs:element minOccurs="0" name="product" type="tns:product"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="product">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="description" type="xs:string"/>
+               <xs:element name="id" type="xs:long"/>
+               <xs:element minOccurs="0" name="name" type="xs:string"/>
+               <xs:element name="price" type="xs:int"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="purchaseOrderResponse">
+            <xs:sequence/>
+         </xs:complexType>
+         <xs:complexType name="getOrder">
+            <xs:sequence>
+               <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="getOrderResponse">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="return" type="tns:order"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="getOrders">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="customer" type="tns:customer"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="customer">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="address" type="xs:string"/>
+               <xs:element minOccurs="0" name="email" type="xs:string"/>
+               <xs:element name="id" type="xs:long"/>
+               <xs:element minOccurs="0" name="name" type="xs:string"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="getOrdersResponse">
+            <xs:sequence>
+               <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:order"/>
+            </xs:sequence>
+         </xs:complexType>
+      </xs:schema>
+   </wsdl:types>
+   <wsdl:message name="purchaseOrderResponse">
+      <wsdl:part element="tns:purchaseOrderResponse" name="parameters"/>
+   </wsdl:message>
+   <wsdl:message name="getOrdersResponse">
+      <wsdl:part element="tns:getOrdersResponse" name="parameters"/>
+   </wsdl:message>
+   <wsdl:message name="getOrderResponse">
+      <wsdl:part element="tns:getOrderResponse" name="parameters"/>
+   </wsdl:message>
+   <wsdl:message name="purchaseOrder">
+      <wsdl:part element="tns:purchaseOrder" name="parameters"/>
+   </wsdl:message>
+   <wsdl:message name="getOrder">
+      <wsdl:part element="tns:getOrder" name="parameters"/>
+   </wsdl:message>
+   <wsdl:message name="getOrders">
+      <wsdl:part element="tns:getOrders" name="parameters"/>
+   </wsdl:message>
+   <wsdl:portType name="OrderSerivceEndpoint">
+      <wsdl:operation name="purchaseOrder">
+         <wsdl:input message="tns:purchaseOrder" name="purchaseOrder"/>
+         <wsdl:output message="tns:purchaseOrderResponse" name="purchaseOrderResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="getOrder">
+         <wsdl:input message="tns:getOrder" name="getOrder"/>
+         <wsdl:output message="tns:getOrderResponse" name="getOrderResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="getOrders">
+         <wsdl:input message="tns:getOrders" name="getOrders"/>
+         <wsdl:output message="tns:getOrdersResponse" name="getOrdersResponse"/>
+      </wsdl:operation>
+   </wsdl:portType>
+   <wsdl:binding name="OrderServiceSoapBinding" type="tns:OrderSerivceEndpoint">
+      <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+      <wsdl:operation name="purchaseOrder">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input name="purchaseOrder">
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output name="purchaseOrderResponse">
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getOrder">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input name="getOrder">
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output name="getOrderResponse">
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getOrders">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input name="getOrders">
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output name="getOrdersResponse">
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:service name="OrderService">
+      <wsdl:port binding="tns:OrderServiceSoapBinding" name="OrderSerivceEndpointPort">
+         <soap:address location="http://localhost:8080/SpringOrderWebService/OrderService"/>
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>

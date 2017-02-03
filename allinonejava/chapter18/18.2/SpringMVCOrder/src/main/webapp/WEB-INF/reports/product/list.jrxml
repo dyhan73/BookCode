@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
+<!-- 2014-12-03T05:27:42 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="list" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a8b9a727-3879-4d66-afbe-9ef3a8970003">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="price" class="java.lang.Integer"/>
+	<field name="description" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="240" y="30" width="80" height="20" uuid="f8dc1d91-8e2c-452d-85c4-f010280e8747"/>
+				<textElement textAlignment="Center">
+					<font fontName="나눔고딕" size="16"/>
+				</textElement>
+				<text><![CDATA[제품 목록]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="b27c080d-92c0-4a6c-9a76-e3f175cb533a"/>
+				<textElement>
+					<font fontName="나눔고딕" size="12" pdfFontName="font/NanumMyeongjo.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[제품명]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="212" y="0" width="100" height="20" uuid="dd6194b4-cf06-48f2-a73e-f6aa0644abb1"/>
+				<textElement>
+					<font fontName="나눔고딕" size="12" pdfFontName="font/NanumMyeongjo.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[가격]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="0" width="100" height="20" uuid="87ac705b-1e81-4f4c-b740-0d21e775c713"/>
+				<textElement>
+					<font fontName="나눔고딕" size="12" pdfFontName="font/NanumMyeongjo.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[제품 설명]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="7f4e14ae-d319-4287-92ab-e3f0e5556ff6"/>
+				<textElement>
+					<font pdfFontName="font/NanumMyeongjo.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="212" y="0" width="100" height="20" uuid="c3fd92d8-350b-4a5a-a61e-ef692be86d61"/>
+				<textElement>
+					<font pdfFontName="font/NanumMyeongjo.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="0" width="100" height="20" uuid="375b2307-064c-44de-ab98-3c4b53a459ba"/>
+				<textElement>
+					<font pdfFontName="font/NanumMyeongjo.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

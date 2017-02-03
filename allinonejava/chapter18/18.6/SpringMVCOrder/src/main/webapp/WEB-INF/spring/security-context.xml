@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+	
+	<http auto-config="true" use-expressions="true">
+		<intercept-url pattern="/" access="permitAll" />
+		<intercept-url pattern="/login.do" access="permitAll" />
+		<intercept-url pattern="/accessdenied.do" access="permitAll" />
+		<intercept-url pattern="/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')"/>
+		<form-login login-page="/login.do" 
+		         	 login-processing-url="/static/j_spring_security_check"
+		         	 authentication-failure-url="/login.do?login_error=t"/>
+		<logout logout-url="/static/j_spring_security_logout"
+		       		logout-success-url="/" />
+		<remember-me />
+		<access-denied-handler error-page="/accessdenied.do"/>
+	</http>
+	
+	<user-service id="userService">
+		<user name="admin" password="admin" authorities="ROLE_ADMIN"/>
+		<user name="manager" password="manager" authorities="ROLE_MANAGER, ROLE_USER"/>
+		<user name="user" password="password" authorities="ROLE_USER" />
+	</user-service>
+	<authentication-manager>
+		<authentication-provider user-service-ref="userService" />
+	</authentication-manager>	
+
+
+<!-- 
+
+	<jdbc-user-service id="jdbcService" data-source-ref="dataSource"
+ 		users-by-username-query= "select username, password, enabled from users where username=?"
+ 		authorities-by-username-query="select username, authority from authorities where username=?"
+	 />
+	<authentication-manager>
+		<authentication-provider user-service-ref="jdbcService" />
+	</authentication-manager>
+	
+	<http auto-config="true" >
+		<intercept-url pattern="/" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/login.do" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/**" access="ROLE_USER"/>
+		<form-login login-page="/login.do" 
+		         	 login-processing-url="/static/j_spring_security_check"
+		         	 authentication-failure-url="/login.do?login_error=t"/>
+		<logout logout-url="/static/j_spring_security_logout"
+		       		logout-success-url="/" />
+		<remember-me />
+	</http>
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="admin" password="admin" authorities="ROLE_ADMIN"/>
+				<user name="manager" password="manager" authorities="ROLE_MANAGER, ROLE_USER"/>
+				<user name="user" password="password" authorities="ROLE_USER" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+
+-->
+</beans:beans>
+

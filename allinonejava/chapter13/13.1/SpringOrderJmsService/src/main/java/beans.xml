@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+	<context:component-scan base-package="com.ensoa" />
+		
+	<bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616"/>
+	</bean>
+	<bean id="jmsListenerContainerFactory" class="org.springframework.jms.config.DefaultJmsListenerContainerFactory">
+    	<property name="connectionFactory" ref="connectionFactory"/>
+	</bean>
+	<!--
+	 <jms:annotation-driven/>
+	
+	<bean id="orderQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="order.queue"/>
+	</bean>
+	<bean id="orderTopic" class="org.apache.activemq.command.ActiveMQTopic">
+		<constructor-arg value="order.topic"/>
+	</bean>
+	<bean id="customerMessageListener" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+		<constructor-arg ref="receiver"/>
+		<property name="defaultListenerMethod" value="receiveCustomerMessage"/>
+	</bean>
+	<bean id="customerContainer" class="org.springframework.jms.listener.SimpleMessageListenerContainer">
+		<property name="messageListener" ref="customerMessageListener"/>
+		<property name="connectionFactory" ref="connectionFactory"/>
+		<property name="destinationName" value="customer.queue"/>
+	</bean>
+	<bean id="orderMessageListener" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+		<constructor-arg ref="receiver"/>
+		<property name="defaultListenerMethod" value="receiveOrderMessage"/>
+	</bean>
+	<bean id="orderContainer" class="org.springframework.jms.listener.SimpleMessageListenerContainer">
+		<property name="messageListener" ref="orderMessageListener"/>
+		<property name="connectionFactory" ref="connectionFactory"/>
+		<property name="destination" ref="orderQueue"/>
+	</bean>
+	<bean id="orderListener" class="com.ensoa.orderjms.OrderListener" />
+
+	<jms:listener-container destination-type="topic" connection-factory="connectionFactory">
+			<jms:listener destination="order.topic" ref="orderListener" method="receiveOrderMessage"/>
+			<jms:listener destination="customer.topic" ref="orderListener" method="receiveCustomerMessage"/>
+	</jms:listener-container>
+		 -->
+	<jms:listener-container>
+			<jms:listener destination="order.queue" ref="orderListener" method="receiveOrderMessage"/>
+			<jms:listener destination="customer.queue" ref="orderListener" method="receiveCustomerMessage"/>
+	</jms:listener-container>
+</beans>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.ensoa.order.entity.mapper.OrderMapper">
+    	<resultMap id="OrderResult" type="OrderEntity" >
+           	<id property="id" column="order_id"/>           	 
+			<result property="orderDate" column="order_date"/>
+			<association property="customer" column="customer_id" 
+									 select="com.ensoa.order.entity.mapper.CustomerMapper.findById"/>
+			<collection property="items" column="order_id"
+								  select="com.ensoa.order.entity.mapper.OrderItemMapper.findByOrderId"/>		
+			<!-- 
+			<collection property="items" resultMap="OrderItemResult"/>						 
+			<association property="customer" 
+									resultMap="com.ensoa.order.entity.mapper.CustomerMapper.CustomerResult"/>
+			<result  property="customer.id" column="customer_id"/> 
+           	<result property="customer.name" column="name"/>
+           	<result property="customer.address" column="address"/>
+           	<result property="customer.email" column="email"/>
+           	 -->
+   		</resultMap>
+        <select id="findAll" resultMap="OrderResult">
+        	SELECT * FROM ORDERS
+        	<!-- 
+        	SELECT ORDERS.ORDER_ID, ORDER_DATE, CUSTOMER_ID,
+        				    ORDER_ITEM_ID, AMOUNT, PRODUCT_ID
+        					FROM ORDERS
+        					LEFT OUTER JOIN ORDER_ITEM
+        					ON ORDERS.ORDER_ID = ORDER_ITEM.ORDER_ID
+ 
+         	SELECT ORDER_ID, ORDER_DATE,
+         				  CUSTOMER.CUSTOMER_ID, NAME, ADDRESS, EMAIL 
+         				  FROM ORDERS
+         				  LEFT OUTER JOIN CUSTOMER 
+         				  ON ORDERS.CUSTOMER_ID = CUSTOMER.CUSTOMER_ID 
+         	 -->
+         </select>
+       	<select id="findById" parameterType="long" resultMap="OrderResult">
+       	    SELECT * FROM ORDERS
+       	           	    	WHERE ORDERS.ORDER_ID = #{orderId}
+            <!-- 
+        	SELECT ORDERS.ORDER_ID, ORDER_DATE, CUSTOMER_ID,
+        				    ORDER_ITEM_ID, AMOUNT, PRODUCT_ID
+        					FROM ORDERS
+        					LEFT OUTER JOIN ORDER_ITEM
+        					ON ORDERS.ORDER_ID = ORDER_ITEM.ORDER_ID
+       	    				WHERE ORDERS.ORDER_ID = #{orderId}
+
+         	SELECT ORDER_ID, ORDER_DATE,
+         				  CUSTOMER.CUSTOMER_ID, NAME, ADDRESS, EMAIL 
+         				  FROM ORDERS
+         				  LEFT OUTER JOIN CUSTOMER 
+         				  ON ORDERS.CUSTOMER_ID = CUSTOMER.CUSTOMER_ID 
+         				  WHERE ORDER_ID = #{orderId}
+       	 	-->
+       	</select>
+       	
+  		<update id="update" parameterType="OrderEntity">
+  			UPDATE ORDERS SET ORDER_DATE = #{orderDate} WHERE ORDER_ID = #{id}
+  		</update>
+       	
+       	<delete id="delete" parameterType="long">
+       		DELETE FROM ORDERS WHERE ORDER_ID = #{id}
+       	</delete>
+    
+       	<insert id="insert" parameterType="OrderEntity" useGeneratedKeys="true" keyProperty="id">
+       		INSERT INTO ORDERS(CUSTOMER_ID, ORDER_DATE) VALUES (#{customer.id}, #{orderDate});
+       	</insert>
+	</mapper>

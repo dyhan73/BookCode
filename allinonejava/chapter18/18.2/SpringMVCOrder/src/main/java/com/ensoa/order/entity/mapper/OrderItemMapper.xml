@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.ensoa.order.entity.mapper.OrderItemMapper">
+		<resultMap id="OrderItemResult" type="OrderItemEntity">
+			<id property="id" column="order_item_id" />
+			<result property="amount" column="amount"/>
+			<association property="product" column="product_id" 
+									 select="com.ensoa.order.entity.mapper.ProductMapper.findById"/>
+		</resultMap>
+       	<select id="findByOrderId" parameterType="long" resultMap="OrderItemResult">
+       		SELECT * FROM ORDER_ITEM WHERE ORDER_ID = #{orderId}
+       	</select>
+		
+       	<select id="findById" parameterType="long" resultMap="OrderItemResult">
+         	SELECT * FROM ORDER_ITEM WHERE ORDER_ITEM_ID=#{id}
+       	</select>
+       	
+  		<update id="update" parameterType="OrderItemEntity">
+  			UPDATE ORDER_ITEM SET AMOUNT = #{amount} WHERE ORDER_ITEM_ID = #{id}
+  		</update>
+       	
+       	<delete id="delete" parameterType="long">
+       		DELETE FROM ORDER_ITEM WHERE ORDER_ITEM_ID = #{id}
+       	</delete>
+    
+       	<insert id="insert" parameterType="OrderItemEntity" useGeneratedKeys="true" keyProperty="id">
+       		INSERT INTO ORDER_ITEM(AMOUNT, PRODUCT_ID, ORDER_ID) VALUES (#{amount}, #{product.id}, #{orderId})
+       	</insert>
+       	
+	</mapper>
