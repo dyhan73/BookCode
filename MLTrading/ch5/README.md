@@ -7,6 +7,13 @@ Machine Learning Trading System Basic
 - Follow the PEP8 (except docstring, variable name length, line limit etc)
 - Fix methods definitions and internal logics (cause original is wrong, in my opinion...)
 
+## Before running....
+- Install Anaconda
+- Install pandas_datareader
+   - $ conda install pandas_datareader
+- Install nomkl
+   - To avoid "ValueError: On entry to DGELSD parameter...." on np.polyfit()
+   - $ conda install nomkl
 ## Description
 
 ## Architecture
