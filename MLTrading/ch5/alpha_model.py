@@ -44,7 +44,7 @@ class MeanReversionModel(AlphaModel):
         tau = [np.sqrt(np.std(np.subtract(ts[lag:], ts[:-lag]))) for lag in lags]
         poly = np.polyfit(np.log(lags), np.log(tau), 1)
 
-        result = poly[0]*2.0
+        result = poly[0] * 2.0
 
         return result
 

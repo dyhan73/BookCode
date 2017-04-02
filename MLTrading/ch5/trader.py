@@ -71,7 +71,8 @@ if __name__ == "__main__":
     #machine_backtester.getHitRatio('rf', '006650', '20151101', '20151130', lags_count=10)
     #machine_backtester.drawHitRatio('rf', '006650', '20151101', '20151130', lags_count=5)
     #machine_backtester.optimizeHyperparameter('rf', '006650', '20150101', '20151130', lags_count=5)
-    machine_backtester.optimizeHyperparameterByRandomSearch('rf', '006650', '20150101', '20151130', lags_count=5)
+    #machine_backtester.optimizeHyperparameterByRandomSearch('rf', '006650', '20150101', '20151130', lags_count=5)
+    machine_backtester.optimizeHyperparameterByRandomSearch('rf', '005930', '20150101', '20151130', lags_count=5)
 
     """
     mean_backtester.setThreshold(1.5)

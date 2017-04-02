@@ -188,7 +188,11 @@ class PortfolioBuilder():
 
             print("... %s of %s : Testing Machine Learning on %s %s" % (index, len(rows_code), code, company))
 
-            df_dataset = self.predictor.makeLaggedDataset(code, self.config.get('start_date'), self.config.get('end_date'), self.config.get('input_column'), self.config.get('output_column'), time_lags=lags_count)
+            df_dataset = self.predictor.makeLaggedDataset(code, self.config.get('start_date')
+                                                          , self.config.get('end_date')
+                                                          , self.config.get('input_column')
+                                                          , self.config.get('output_column')
+                                                          , time_lags=lags_count)
 
             if df_dataset.shape[0]>0:
 
@@ -233,7 +237,9 @@ class PortfolioBuilder():
             percentiles[a_predictor] = np.percentile(df_machine_learning[a_predictor], np.arange(0, 100, 10))
 
             for row_index in range(df_machine_learning.shape[0]):
-                df_machine_learning.loc[row_index, 'rank_%s' % (a_predictor)] = self.assessMachineLearning(percentiles[a_predictor], df_machine_learning.loc[row_index, a_predictor])
+                df_machine_learning.loc[row_index, 'rank_%s' % (a_predictor)] \
+                    = self.assessMachineLearning(percentiles[a_predictor]
+                                                 , df_machine_learning.loc[row_index, a_predictor])
 
         df_machine_learning['total_score'] = df_machine_learning[mr_models].sum(axis=1)
         df_machine_learning['rank'] = df_machine_learning[listed_columns(mr_models, 'rank_%s')].sum(axis=1)

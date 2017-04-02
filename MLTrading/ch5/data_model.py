@@ -105,7 +105,7 @@ class Portfolio(BaseCollection):
 
     def dump(self):
         print(">>> Portfolio.dump <<<")
-        for key, value in self.items:
+        for key, value in self.items.items():
             print("- model=%s" % (key))
             for a_item in value:
                 print("... column=%s : index=%s, code=%s, company=%s" % (a_item.column, a_item.index, a_item.code, a_item.company))
